@@ -4,16 +4,20 @@ import { ProductCard } from './components/ProductCard';
 import { ProductModal } from './components/ProductModal';
 import { CartModal } from './components/CartModal';
 import { Footer } from './components/Footer';
-import { Sparkles, Zap } from 'lucide-react';
 import { LegalModal } from './components/LegalModal';
+import { HeroBanner } from './components/HeroBanner';
+import { WhatsAppButton } from './components/WhatsAppButton';
+import { TrustBar } from './components/TrustBar';
+import { ToastNotification } from './components/ToastNotification';
+import { CookieBanner } from './components/CookieBanner';
 import './App.css';
 
-const WHATSAPP_PHONE = "593999999999"; 
+const WHATSAPP_PHONE = "593968291372"; 
 
-// Reemplaza esta URL con la URL de tu Google Sheet publicado en la web en formato CSV
+// URL de tu Google Sheet publicado en formato CSV
 const GOOGLE_SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSrujf2N_Fd52z_6BOXHbj_650jp_JyCIYEjyagtQbUO25Z5Yz6GSavmnsGQASN3WZ8Uyw6gqh4AgZm/pub?gid=0&single=true&output=csv"; 
 
-// Productos de respaldo (si no hay Google Sheet conectado)
+// Productos de respaldo (con soporte para múltiples imágenes en arreglo)
 const BACKUP_PRODUCTS = [
   {
     id: 1,
@@ -24,6 +28,7 @@ const BACKUP_PRODUCTS = [
     ventas: 120,
     categoria: "Audio y Sonido",
     imagen: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500&q=80",
+    imagenes: ["https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500&q=80"],
     descripcion: "Audífonos de alta definición con aislamiento pasivo de ruido y estuche recargable."
   },
   {
@@ -35,6 +40,7 @@ const BACKUP_PRODUCTS = [
     ventas: 89,
     categoria: "Audio y Sonido",
     imagen: "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=500&q=80",
+    imagenes: ["https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=500&q=80"],
     descripcion: "Pantalla digital LED, resistencia al sudor e ideal para deportes."
   },
   {
@@ -46,6 +52,7 @@ const BACKUP_PRODUCTS = [
     ventas: 210,
     categoria: "Hogar y Tecnología",
     imagen: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=500&q=80",
+    imagenes: ["https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=500&q=80"],
     descripcion: "Soporte universal ultra resistente. Soporta hasta 50kg."
   },
   {
@@ -57,6 +64,7 @@ const BACKUP_PRODUCTS = [
     ventas: 340,
     categoria: "Relojes y Smartbands",
     imagen: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=500&q=80",
+    imagenes: ["https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=500&q=80"],
     descripcion: "Notificaciones de WhatsApp, llamadas Bluetooth y medidor de ritmo cardíaco."
   },
   {
@@ -68,6 +76,7 @@ const BACKUP_PRODUCTS = [
     ventas: 155,
     categoria: "Accesorios para Auto",
     imagen: "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=500&q=80",
+    imagenes: ["https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=500&q=80"],
     descripcion: "Imán de alta potencia para rejilla de ventilación, rotación 360 grados."
   },
   {
@@ -79,6 +88,7 @@ const BACKUP_PRODUCTS = [
     ventas: 78,
     categoria: "Cuidado Personal y Belleza",
     imagen: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&q=80",
+    imagenes: ["https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&q=80"],
     descripcion: "Tratamiento rejuvenecedor con fototerapia para piel y rostro."
   }
 ];
@@ -91,46 +101,99 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeLegalPage, setActiveLegalPage] = useState(null);
+  const [toastMessage, setToastMessage] = useState(null);
 
-  // Conexión dinámica a Google Sheets en tiempo real
-  useEffect(() => {
-    if (!GOOGLE_SHEETS_CSV_URL) return;
+  const handleScrollToProducts = () => {
+    const mainSection = document.querySelector('.products-grid');
+    if (mainSection) {
+      mainSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
-    fetch(GOOGLE_SHEETS_CSV_URL)
-      .then((res) => res.text())
-      .then((csvText) => {
-        const lines = csvText.split('\n');
-        const headers = lines[0].split(',').map(h => h.trim());
-        const sheetProducts = [];
+  // Conexión dinámica a Google Sheets en tiempo real con soporte para múltiples fotos
+  // Conexión a Google Sheets con parser CSV estandarizado
+// Conexión a Google Sheets con soporte ilimitado de imágenes
+useEffect(() => {
+  if (!GOOGLE_SHEETS_CSV_URL) return;
 
-        for (let i = 1; i < lines.length; i++) {
-          if (!lines[i].trim()) continue;
-          const currentline = lines[i].split(',');
-          const obj = {};
-          
-          headers.forEach((header, index) => {
-            obj[header] = currentline[index] ? currentline[index].trim() : '';
-          });
+  fetch(GOOGLE_SHEETS_CSV_URL)
+    .then((res) => res.text())
+    .then((csvText) => {
+      // Función para separar filas CSV manteniendo celdas con comillas
+      const parseCSVLine = (line) => {
+        const result = [];
+        let cur = '';
+        let inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+          const char = line[i];
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === ',' && !inQuotes) {
+            result.push(cur.trim());
+            cur = '';
+          } else {
+            cur += char;
+          }
+        }
+        result.push(cur.trim());
+        return result;
+      };
 
+      const lines = csvText.split(/\r?\n/);
+      if (lines.length < 2) return;
+
+      const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase().replace(/^"|"$/g, ''));
+      const sheetProducts = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        
+        const currentline = parseCSVLine(lines[i]);
+        const obj = {};
+        
+        headers.forEach((header, index) => {
+          let val = currentline[index] ? currentline[index] : '';
+          val = val.replace(/^"|"$/g, '');
+          obj[header] = val;
+        });
+
+        const fallbackImg = "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=500&q=80";
+        let imgsArray = [];
+
+        // Extraer TODAS las URLs válidas que comiencen por http/https separadas por comas o espacios
+        if (obj.imagen && obj.imagen.trim() !== '') {
+          imgsArray = obj.imagen
+            .split(',')
+            .map(u => u.trim().replace(/^"|"$/g, ''))
+            .filter(u => u.startsWith('http'));
+        }
+
+        if (imgsArray.length === 0) {
+          imgsArray = [fallbackImg];
+        }
+
+        if (obj.nombre) {
           sheetProducts.push({
             id: obj.id || i,
             nombre: obj.nombre,
-            sku: obj.sku,
+            sku: obj.sku || `SKU-${i}`,
             precio: parseFloat(obj.precio) || 0,
-            precioAnterior: parseFloat(obj.precioAnterior) || null,
+            precioAnterior: parseFloat(obj.precioanterior || obj.precioAnterior) || null,
             ventas: parseInt(obj.ventas) || 50,
-            categoria: obj.categoria,
-            imagen: obj.imagen,
-            descripcion: obj.descripcion
+            categoria: obj.categoria || 'General',
+            imagen: imgsArray[0],
+            imagenes: imgsArray, // Ahora albergará 3, 4 o más imágenes
+            descripcion: obj.descripcion || ''
           });
         }
+      }
 
-        if (sheetProducts.length > 0) {
-          setProducts(sheetProducts);
-        }
-      })
-      .catch((err) => console.log('Cargando productos de respaldo:', err));
-  }, []);
+      if (sheetProducts.length > 0) {
+        setProducts(sheetProducts);
+      }
+    })
+    .catch((err) => console.log('Cargando productos de respaldo:', err));
+}, []);
 
   const categories = ['Todos', ...new Set(products.map(p => p.categoria))];
 
@@ -149,6 +212,11 @@ export default function App() {
       }
       return [...prev, { ...product, quantity }];
     });
+
+    setToastMessage(product.nombre);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 2500);
   };
 
   const handleRemoveFromCart = (id) => setCart(prev => prev.filter(item => item.id !== id));
@@ -158,6 +226,7 @@ export default function App() {
 
   return (
     <div className="app-container">
+      {/* 1. NAVBAR */}
       <Navbar 
         cartCount={cartCount}
         onOpenCart={() => setIsCartOpen(true)}
@@ -166,20 +235,17 @@ export default function App() {
         categories={categories}
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
-        onOpenHelp={() => alert("Próximamente: Centro de Ayuda")}
+        onOpenHelp={() => setActiveLegalPage('como-comprar')}
         PHONE_NUMBER={WHATSAPP_PHONE}
       />
 
-      <div className="flash-sale-banner">
-        <div className="flash-sale-title">
-          <Sparkles size={22} color="#a5b4fc" />
-          <span>OFERTAS Y MÁS VENDIDOS</span>
-        </div>
-        <div style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Zap size={16} color="#818cf8" /> Precios especiales solicitando por WhatsApp
-        </div>
-      </div>
+      {/* 2. BARRA DE CONFIANZA */}
+      <TrustBar PHONE_NUMBER={WHATSAPP_PHONE} />
 
+      {/* 3. HERO BANNER PRINCIPAL */}
+      <HeroBanner onExploreClick={handleScrollToProducts} />
+
+      {/* 4. MAIN GRID DE PRODUCTOS */}
       <main className="products-grid">
         {filteredProducts.map(product => (
           <ProductCard
@@ -191,11 +257,24 @@ export default function App() {
         ))}
       </main>
 
+      {/* 5. FOOTER */}
       <Footer 
         PHONE_NUMBER={WHATSAPP_PHONE}
-        onOpenPage={(pageKey) => alert(`Abriendo sección: ${pageKey}`)} 
+        onOpenPage={(pageKey) => setActiveLegalPage(pageKey)} 
       />
 
+      {/* 6. BOTÓN FLOTANTE */}
+      <WhatsAppButton PHONE_NUMBER={WHATSAPP_PHONE} />
+
+      {/* 7. TOAST NOTIFICATION */}
+      <ToastNotification 
+        toastMessage={toastMessage} 
+        onClose={() => setToastMessage(null)} 
+      />
+
+      <CookieBanner onOpenPrivacy={(pageKey) => setActiveLegalPage(pageKey)} />
+
+      {/* 8. MODALES */}
       <ProductModal
         product={selectedProduct}
         onClose={() => setSelectedProduct(null)}
@@ -211,7 +290,6 @@ export default function App() {
         PHONE_NUMBER={WHATSAPP_PHONE}
       />
 
-      {/* 4. COMPONENTE MODAL LEGAL INTEGRADO */}
       <LegalModal 
         pageKey={activeLegalPage}
         onClose={() => setActiveLegalPage(null)}

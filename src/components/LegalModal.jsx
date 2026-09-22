@@ -48,7 +48,7 @@ export const LegalModal = ({ pageKey, onClose }) => {
           {pageKey === 'privacidad' && (
             <div className="legal-content">
               <p className="legal-intro">
-                En EcuadorTienda valoramos tu privacidad. A continuación, detallamos cómo manejamos la información de nuestros clientes.
+                En Combazo Store Quito valoramos tu privacidad. A continuación, detallamos cómo manejamos la información de nuestros clientes.
               </p>
               <h4>1. Recopilación de Datos</h4>
               <p>No solicitamos registro de usuario, contraseñas ni datos bancarios dentro de este sitio web. Solo se solicita tu nombre opcional para la atención en WhatsApp.</p>

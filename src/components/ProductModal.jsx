@@ -1,14 +1,34 @@
-import React, { useState } from 'react';
-import { X, Star, ShoppingCart, ShieldCheck, Truck, Plus, Minus } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Star, ShoppingCart, ShieldCheck, Truck, Plus, Minus, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const ProductModal = ({ product, onClose, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
+  const [selectedImgIndex, setSelectedImgIndex] = useState(0);
+
+  useEffect(() => {
+    setQuantity(1);
+    setSelectedImgIndex(0);
+  }, [product]);
 
   if (!product) return null;
+
+  const images = product.imagenes && product.imagenes.length > 0 
+    ? product.imagenes 
+    : [product.imagen];
 
   const discount = product.precioAnterior 
     ? Math.round(((product.precioAnterior - product.precio) / product.precioAnterior) * 100) 
     : 0;
+
+  const handleNextImg = (e) => {
+    e.stopPropagation();
+    setSelectedImgIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const handlePrevImg = (e) => {
+    e.stopPropagation();
+    setSelectedImgIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
 
   const handleDecrease = () => {
     if (quantity > 1) setQuantity(prev => prev - 1);
@@ -33,27 +53,61 @@ export const ProductModal = ({ product, onClose, onAddToCart }) => {
         </button>
 
         <div className="modal-grid-layout">
-          {/* Columna Izquierda: Galería / Imagen */}
-          <div className="modal-image-column">
+          {/* ÚNICA COLUMNA IZQUIERDA: Galería completa */}
+          <div className="modal-gallery-wrapper">
             <div className="modal-image-container">
               {discount > 0 && <span className="modal-badge-discount">-{discount}% OFF</span>}
+              
               <img 
-                src={product.imagen} 
+                src={images[selectedImgIndex] || product.imagen} 
                 alt={product.nombre} 
                 onError={(e) => {
                   e.target.src = "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=500&q=80";
                 }}
               />
+
+              {/* Flechas laterales si hay más de 1 foto */}
+              {images.length > 1 && (
+                <>
+                  <button className="modal-img-arrow left" onClick={handlePrevImg} title="Anterior">
+                    <ChevronLeft size={20} />
+                  </button>
+                  <button className="modal-img-arrow right" onClick={handleNextImg} title="Siguiente">
+                    <ChevronRight size={20} />
+                  </button>
+                </>
+              )}
             </div>
+
+            {/* Miniaturas cuadradas alineadas debajo de la foto principal */}
+            {images.length > 1 && (
+              <div className="modal-thumbnails-strip">
+                {images.map((imgUrl, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    className={`modal-thumb-btn ${selectedImgIndex === index ? 'active' : ''}`}
+                    onClick={() => setSelectedImgIndex(index)}
+                  >
+                    <img 
+                      src={imgUrl} 
+                      alt={`Vista ${index + 1}`} 
+                      onError={(e) => {
+                        e.target.src = "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=500&q=80";
+                      }}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Columna Derecha: Información del Producto */}
+          {/* ÚNICA COLUMNA DERECHA: Información */}
           <div className="modal-info-column">
             <span className="modal-category-tag">{product.categoria || 'General'}</span>
             <h2 className="modal-product-title">{product.nombre}</h2>
             <p className="modal-product-sku">SKU: <strong>{product.sku}</strong></p>
 
-            {/* Valoración y Ventas */}
             <div className="modal-rating-row">
               <div className="stars">
                 <Star size={16} fill="#f59e0b" stroke="none" />
@@ -66,7 +120,6 @@ export const ProductModal = ({ product, onClose, onAddToCart }) => {
               <span className="sales-count">• {product.ventas || 50}+ vendidos</span>
             </div>
 
-            {/* Bloque de Precio */}
             <div className="modal-price-box">
               <span className="modal-current-price">${product.precio.toFixed(2)}</span>
               {product.precioAnterior && (
@@ -74,13 +127,11 @@ export const ProductModal = ({ product, onClose, onAddToCart }) => {
               )}
             </div>
 
-            {/* Descripción */}
             <div className="modal-description-box">
               <h4>Descripción del producto</h4>
-              <p>{product.descripcion || 'Sin descripción detallada disponible para este producto.'}</p>
+              <p>{product.descripcion || 'Sin descripción disponible.'}</p>
             </div>
 
-            {/* Selector de Cantidad */}
             <div className="modal-quantity-selector">
               <span className="qty-label">Cantidad:</span>
               <div className="qty-controls">
@@ -90,13 +141,11 @@ export const ProductModal = ({ product, onClose, onAddToCart }) => {
               </div>
             </div>
 
-            {/* Botón de Agregar */}
             <button className="modal-add-to-cart-btn" onClick={handleAdd}>
               <ShoppingCart size={20} />
               <span>Agregar al Carrito • ${(product.precio * quantity).toFixed(2)}</span>
             </button>
 
-            {/* Garantías Rápidas */}
             <div className="modal-guarantees">
               <div className="guarantee-chip">
                 <Truck size={16} color="#4f46e5" />

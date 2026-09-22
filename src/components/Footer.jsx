@@ -44,8 +44,8 @@ export const Footer = ({ onOpenPage, PHONE_NUMBER }) => {
         {/* Columna 1: Información de la Tienda */}
         <div className="footer-col brand-col">
           <div className="footer-logo">
-            <span className="logo-badge">EXPRESS</span>
-            <h3>EcuadorTienda</h3>
+            <span className="logo-badge">COMBAZO</span>
+            <h3>Store Quito</h3>
           </div>
           <p className="footer-about">
             Tu catálogo digital de confianza. Selecciona tus productos favoritos y realiza tu pedido al instante mediante WhatsApp.
@@ -53,17 +53,9 @@ export const Footer = ({ onOpenPage, PHONE_NUMBER }) => {
           
           {/* Redes Sociales con SVGs Inline para evitar errores de librerías */}
           <div className="footer-socials">
-            {/* Instagram */}
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-              </svg>
-            </a>
-            
+          
             {/* Facebook */}
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
+            <a href="https://www.facebook.com/people/Combazo-Store-Quito/61566332593283/?sk=owner_reels" target="_blank" rel="noreferrer" aria-label="Facebook">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
               </svg>
@@ -140,7 +132,7 @@ export const Footer = ({ onOpenPage, PHONE_NUMBER }) => {
 
       {/* 3. BARRA INFERIOR / COPYRIGHT */}
       <div className="footer-bottom-bar">
-        <p>© {currentYear} EcuadorTienda. Todos los derechos reservados.</p>
+        <p>© {currentYear} Combazo Store Quito. Todos los derechos reservados.</p>
         <div className="footer-legal-links">
           <button onClick={() => onOpenPage('terminos')}>Términos de uso</button>
           <span>•</span>

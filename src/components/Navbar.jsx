@@ -32,10 +32,10 @@ export const Navbar = ({
         
         {/* 1. BRAND / LOGO */}
         <div className="brand-zone" onClick={() => onSelectCategory('Todos')}>
-          <span className="logo-badge">EXPRESS</span>
+          <span className="logo-badge">Combazo</span>
           <div className="logo-text">
-            <h2>EcuadorTienda</h2>
-            <p>Catálogo Digital</p>
+            <h2>Store</h2>
+            <p>Quito</p>
           </div>
         </div>
 
