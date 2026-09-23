@@ -233,18 +233,28 @@ html, body {
 }
 
 /* Header Compacto de Una Sola Línea */
-.header-single-nav {
-  background: #ffffff;
+/* ================= Header Fijo (Sticky Navbar) ================= */
+/* ================= Header Fijo (Fixed Navbar) ================= */
+.header-single-nav,
+.header-main {
+  background: #ffffff !important;
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 10px 20px;
-  position: sticky;
-  top: 10px;
-  z-index: 500;
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
-  margin-bottom: 20px;
+  position: fixed !important; /* Mantiene la barra siempre fija en pantalla */
+  top: 10px !important;
+  left: 24px;
+  right: 24px;
+  max-width: calc(100% - 48px);
+  margin: 0 auto !important;
+  z-index: 1000 !important;
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.1) !important;
 }
 
+/* Espaciador para que el contenido de la web no quede tapado por el Navbar fijo */
+.app-container {
+  padding-top: 90px !important;
+}
 .nav-wrapper {
   display: flex;
   align-items: center;
@@ -1163,17 +1173,18 @@ html, body {
   font-weight: 500;
 }
 
-/* Modal Carrito */
+/* ================= Estructura Unificada del Modal del Carrito ================= */
 .cart-modal-card {
   background: #ffffff !important;
   border-radius: 20px;
   width: 100%;
-  max-width: 480px;
+  max-width: 460px;
   box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35);
   overflow: hidden;
   position: relative;
   animation: modalFadeIn 0.2s ease-out;
   border: 1px solid #e2e8f0;
+  box-sizing: border-box;
 }
 
 .cart-modal-header {
@@ -1185,8 +1196,46 @@ html, body {
   background: #ffffff;
 }
 
-.cart-header-title { display: flex; align-items: center; gap: 10px; }
-.cart-header-title h3 { font-size: 1.1rem; font-weight: 800; color: #0f172a; margin: 0; }
+.cart-header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cart-header-title h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+/* Estado Vacío del Carrito (Laptop y Móvil) */
+.cart-empty-state {
+  padding: 36px 24px !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  box-sizing: border-box !important;
+}
+
+.cart-empty-state p {
+  font-size: 1rem !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+}
+
+.cart-empty-state span {
+  font-size: 0.85rem !important;
+  color: #64748b !important;
+  line-height: 1.5 !important;
+  max-width: 320px !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
 
 .cart-close-btn {
   background: #f1f5f9;
@@ -1722,6 +1771,42 @@ html, body {
     bottom: auto !important;
     top: 16px !important;
     width: 90% !important;
+  }
+
+  .cart-modal-card {
+    width: 92% !important;
+    max-width: 360px !important;
+    margin: 0 auto !important;
+    border-radius: 18px !important;
+  }
+
+  .cart-modal-header {
+    padding: 14px 16px !important;
+  }
+
+  .cart-header-title h3 {
+    font-size: 1rem !important;
+  }
+
+  .cart-empty-state {
+    padding: 24px 16px !important;
+    text-align: center !important;
+  }
+
+  .cart-empty-state p {
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .cart-empty-state span {
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .cart-modal-body {
+    padding: 16px !important;
+    max-height: 75vh !important;
+    overflow-y: auto !important;
   }
 }
 
