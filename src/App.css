@@ -1816,3 +1816,339 @@ html, body {
   }
 }
 
+/* Contenedor principal del Banner */
+.hero-banner-container {
+  position: relative;
+  width: 100%;
+  min-height: 380px;
+  max-height: 480px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* Imagen de fondo */
+.hero-bg-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.hero-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Superposición sutil */
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg, 
+    rgba(2, 13, 33, 0.6) 0%, 
+    rgba(2, 13, 33, 0.2) 50%, 
+    transparent 100%
+  );
+}
+
+/* Capa de acción sobre la imagen */
+.hero-content-layer {
+  position: relative;
+  z-index: 2;
+  padding: 2.5rem;
+  width: 100%;
+}
+
+.hero-actions-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+/* Botón llamativo en Amarillo/Azul corporativo */
+.hero-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: #facc15; /* Amarillo de la imagen */
+  color: #0f172a; /* Texto oscuro para máximo contraste */
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(250, 204, 21, 0.4);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.hero-btn-primary:hover {
+  background-color: #eab308;
+  transform: translateY(-2px);
+}
+
+/* Badge de confianza */
+.hero-trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  padding: 0.65rem 1.1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Ajustes para celulares */
+@media (max-width: 768px) {
+  .hero-banner-container {
+    min-height: 260px;
+    border-radius: 14px;
+  }
+
+  .hero-content-layer {
+    padding: 1.25rem;
+  }
+
+  .hero-actions-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .hero-btn-primary {
+    justify-content: center;
+    width: 100%;
+    font-size: 0.95rem;
+  }
+
+  .hero-trust-badge {
+    justify-content: center;
+    font-size: 0.8rem;
+  }
+}
+
+/* Contenedor adaptado */
+.hero-banner-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  max-height: 480px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  margin-bottom: 2rem;
+  background-color: #020d21;
+}
+
+.hero-bg-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.hero-bg-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    0deg, 
+    rgba(2, 13, 33, 0.6) 0%, 
+    transparent 45%
+  );
+  pointer-events: none;
+}
+
+/* Botón flotante para sugerir la ampliación */
+.hero-expand-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.45rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hero-expand-btn:hover {
+  background: rgba(15, 23, 42, 0.95);
+  transform: scale(1.03);
+}
+
+/* Barra inferior de botones */
+.hero-content-layer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  padding: 1rem 1.5rem;
+  width: 100%;
+  pointer-events: none;
+}
+
+.hero-actions-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  pointer-events: auto;
+}
+
+.hero-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #6366f1;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  transition: all 0.2s ease;
+}
+
+.hero-btn-primary:hover {
+  background-color: #4f46e5;
+  transform: translateY(-2px);
+}
+
+.hero-trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================
+   ESTILOS DEL MODAL / LIGHTBOX
+   ========================================== */
+.hero-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(2, 6, 23, 0.88);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+.hero-modal-content {
+  position: relative;
+  max-width: 1200px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-modal-image {
+  width: 100%;
+  height: auto;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.hero-modal-close {
+  position: absolute;
+  top: -45px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #ffffff;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.hero-modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Adaptación para móviles */
+@media (max-width: 768px) {
+  .hero-banner-container {
+    aspect-ratio: 16 / 9;
+  }
+  
+  .hero-actions-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-btn-primary, .hero-trust-badge {
+    justify-content: center;
+  }
+
+  .hero-expand-btn {
+    top: 10px;
+    right: 10px;
+    font-size: 0.7rem;
+    padding: 0.35rem 0.65rem;
+  }
+}

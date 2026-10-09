@@ -1,73 +1,66 @@
-import React from 'react';
-import { Sparkles, ShoppingBag, ArrowRight, ShieldCheck, Zap, Truck } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShoppingBag, ArrowRight, Zap, Maximize2, X } from 'lucide-react';
 
 export const HeroBanner = ({ onExploreClick }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = (e) => {
+    e.stopPropagation();
+    setIsModalOpen(false);
+  };
+
   return (
-    <section className="hero-modern-banner">
-      {/* Columna Izquierda: Mensaje Principal */}
-      <div className="hero-text-container">
-        <div className="hero-top-badge">
-          <Sparkles size={15} color="#818cf8" />
-          <span>Novedades & Tendencias</span>
-          <span className="badge-divider">•</span>
-          <span className="offer-highlight">Descuentos Especiales</span>
-        </div>
-
-        <h1 className="hero-main-title">
-          Productos que hacen tu vida <br className="title-br" />
-          <span className="gradient-text">más fácil</span>
-        </h1>
-
-        <p className="hero-subtext">
-          Descubre lo mejor en tecnología, hogar y accesorios con garantía de satisfacción y pedidos instantáneos por WhatsApp.
-        </p>
-
-        <div className="hero-cta-wrapper">
-          <button className="hero-btn-primary" onClick={onExploreClick}>
-            <ShoppingBag size={18} />
-            <span>Ver Catálogo</span>
-            <ArrowRight size={16} />
+    <>
+      {/* Contenedor del Banner Principal */}
+      <section className="hero-banner-container">
+        <div className="hero-bg-wrapper" onClick={openModal} title="Haz clic para ver la imagen completa">
+          <img 
+            src="/hero-banner.jpeg" 
+            alt="Combazo Store Banner" 
+            className="hero-bg-image"
+          />
+          <div className="hero-overlay"></div>
+          
+          {/* Botón flotante disimulado para avisar que se puede ampliar */}
+          <button type="button" className="hero-expand-btn" onClick={openModal}>
+            <Maximize2 size={16} />
+            <span>Ver Arte Completo</span>
           </button>
-
-          <div className="hero-trust-tag">
-            <Zap size={16} color="#10b981" />
-            <span>Pedidos directos sin tarjetas</span>
-          </div>
         </div>
 
-        {/* Garantías compactas en lugar de la barra azul */}
-        <div className="hero-features-row">
-          <div className="feature-pill">
-            <Truck size={15} color="#a5b4fc" />
-            <span>Envíos Nacionales</span>
-          </div>
-          <div className="feature-pill">
-            <ShieldCheck size={15} color="#10b981" />
-            <span>Atención 100% Personalizada</span>
+        {/* Acciones principales */}
+        <div className="hero-content-layer">
+          <div className="hero-actions-wrapper">
+            <button className="hero-btn-primary" onClick={onExploreClick}>
+              <ShoppingBag size={18} />
+              <span>Ver Catálogo Completo</span>
+              <ArrowRight size={16} />
+            </button>
+
+            <div className="hero-trust-badge">
+              <Zap size={15} color="#facc15" />
+              <span>Pedidos directos por WhatsApp sin tarjeta</span>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Columna Derecha: Tarjeta Visual Ilustrativa */}
-      <div className="hero-visual-container">
-        <div className="floating-card product-preview-1">
-          <div className="preview-icon">🎧</div>
-          <div className="preview-info">
-            <h4>Audio & Tech</h4>
-            <p>Hasta -40% OFF</p>
+      {/* Modal / Lightbox a Pantalla Completa (se abre al hacer clic) */}
+      {isModalOpen && (
+        <div className="hero-modal-overlay" onClick={closeModal}>
+          <div className="hero-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="hero-modal-close" onClick={closeModal} aria-label="Cerrar">
+              <X size={24} />
+            </button>
+            <img 
+              src="/hero-banner.jpeg" 
+              alt="Combazo Store Promoción Completa" 
+              className="hero-modal-image"
+            />
           </div>
         </div>
-
-        <div className="floating-card product-preview-2">
-          <div className="preview-icon">⌚</div>
-          <div className="preview-info">
-            <h4>Smartwatches</h4>
-            <p>Modelos 2026</p>
-          </div>
-        </div>
-
-        <div className="hero-glow-effect"></div>
-      </div>
-    </section>
+      )}
+    </>
   );
 };
